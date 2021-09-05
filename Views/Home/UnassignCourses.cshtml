@@ -1,0 +1,43 @@
+﻿
+@{
+    ViewBag.Title = "UnassignCourses";
+    string message = ViewBag.Message;
+    string message2 = ViewBag.Message2;
+}
+
+
+
+<div class="padding-up"></div>
+
+<fieldset>
+    <legend>Unassign All Courses</legend>
+    @if (@message != null)
+    {
+        <div id="warningLabel" class="alert-warning">
+            <label>@message</label>
+            <label>@message2</label>
+        </div>
+    }
+    <form method="post" id="unassignForm">
+        <input type="submit" name="" id="unassignCourse" data-confirm="Are you sure?" value="Unassign Courses" />
+    </form>
+</fieldset>
+
+@section scripts
+{
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            setTimeout(function () {
+                $("#warningLabel").hide(1000).empty();
+            }, 5000);
+
+            jquery('[data-confirm]').click(function (e) {
+                if (!confirm(jquery(this).attr("data-confirm"))) {
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
+}

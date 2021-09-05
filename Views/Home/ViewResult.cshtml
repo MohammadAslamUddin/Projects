@@ -1,0 +1,114 @@
+﻿@using System.Security.Policy
+@model Projects.Models.SaveResult
+
+@{
+    ViewBag.Title = "ViewResult";
+    List<SelectListItem> students = ViewBag.Students;
+}
+
+
+
+<div class="padding-up"></div>
+<fieldset>
+    <legend>View Result</legend>
+    @using (Html.BeginForm("MakePDF", "Home"))
+    {
+        <table class="table table-borderless d-grid">
+            <tbody>
+                <tr>
+                    <td>@Html.LabelFor(m => m.StudentRegNo)</td>
+                    <td>@Html.DropDownListFor(m => m.StudentRegNo, students, "value", "Text")</td>
+                    <td>@Html.ValidationMessageFor(m => m.StudentRegNo)</td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor(m => m.Name)</td>
+                    <td>@Html.TextBoxFor(m => m.Name)</td>
+                    <td>@Html.ValidationMessageFor(m => m.Name)</td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor(m => m.Email)</td>
+                    <td>@Html.TextBoxFor(m => m.Email)</td>
+                    <td>@Html.ValidationMessageFor(m => m.Email)</td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor(m => m.DepartmentId)</td>
+                    <td>@Html.TextBoxFor(m => m.DepartmentId)</td>
+                    <td>@Html.ValidationMessageFor(m => m.DepartmentId)</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><input type="submit" value="Make PDF" /></td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="table d-grid">
+            <thead>
+                <tr>
+                    <th>Course Code</th>
+                    <th>Name</th>
+                    <th>Grade</th>
+                </tr>
+            </thead>
+            <tbody id="resultTableBody">
+            </tbody>
+        </table>
+    }
+</fieldset>
+
+@section scripts
+{
+    <script>
+        $(function() {
+            $('#StudentRegNo').on('change',
+                function() {
+                    var studentId = $('#StudentRegNo').val();
+
+                    $('#Name').prop('disabled', true);
+                    $('#Email').prop('disabled', true);
+                    $('#DepartmentId').prop('disabled', true);
+
+                    var json = {
+                        id: studentId
+                    };
+
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("GetStudnetInfoByCourseId", "Home")',
+                        contentType: 'application/json',
+                        data: JSON.stringify(json),
+                        success: function (response) {
+                            $('#Name').val(response['Name']);
+                            $('#Email').val(response['Email']);
+                            $('#DepartmentId').val(response['DepartmentId']);
+                        }
+                    });
+                });
+        });
+
+
+        $(function() {
+            $('#StudentRegNo').on('change',
+                function() {
+                    var studentId = $('#StudentRegNo').val();
+                    var json = {
+                        id: studentId
+                    };
+
+                    $('#resultTableBody').empty();
+
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("GetResultByStudentId", "Home")',
+                        contentType: 'application/json',
+                        data: JSON.stringify(json),
+                        success: function (response) {
+                            $.each(response,
+                                function(key, value) {
+                                    $('#resultTableBody').append('<tr><td>' + value.Code + '</td><td>' + value.Name + '</td><td>' + value.Grade + '</td></tr>');
+                                });
+                        }
+                    });
+                });
+        });
+    </script>
+}

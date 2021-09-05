@@ -1,0 +1,94 @@
+﻿@model Projects.Models.AllocateClassRoom
+@{
+    ViewBag.Title = "AllocateClassRoom";
+    List<SelectListItem> departments = ViewBag.DepartmentLists;
+    List<SelectListItem> rooms = ViewBag.RoomList;
+    List<SelectListItem> days = ViewBag.DayList;
+    string message = ViewBag.Message;
+
+}
+
+
+<div class="padding-up"></div>
+<fieldset>
+    <legend>Allocate Class Room</legend>
+    @using (Html.BeginForm())
+    {
+        <table class="table table-borderless d-block">
+            <tbody>
+            <tr>
+                <td>@Html.LabelFor(m => m.DepartmentId)</td>
+                <td>@Html.DropDownListFor(m => m.DepartmentId, departments, "Value", "Text")</td>
+                <td>@Html.ValidationMessageFor(m => m.DepartmentId)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.CourseId)</td>
+                <td>
+                    <select id="CourseId" name="CourseId" class="CourseId">
+                        <option>Select Course</option>
+                    </select>
+                </td>
+                <td>@Html.ValidationMessageFor(m => m.DepartmentId)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.RoomId)</td>
+                <td>@Html.DropDownListFor(m => m.RoomId, rooms, "Value", "Text")</td>
+                <td>@Html.ValidationMessageFor(m => m.RoomId)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.DayId)</td>
+                <td>@Html.DropDownListFor(m => m.DayId, days, "Value", "Text")</td>
+                <td>@Html.ValidationMessageFor(m => m.DayId)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.FromTime)</td>
+                 <td><input type="text" name="FromTime" id="FromTime"/></td>
+                <td>@Html.ValidationMessageFor(m=>m.FromTime)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.ToTime)</td>
+                <td><input type="text" name="ToTime" id="ToTime"/></td>
+                <td>@Html.ValidationMessageFor(m => m.ToTime)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input value="Allocate" type="submit" class="btn-outline-dark btn-sm" /></td>
+            </tr>
+            </tbody>
+        </table>
+        <label>@message</label>
+    }
+</fieldset>
+@section scripts
+{
+    <script src="~/Scripts/jquery.timepicker.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('#DepartmentId').on('change', function () {
+
+                var deptId = $('#DepartmentId').val();
+
+                $('#CourseId').empty();
+                $('#CourseId').append('<option value="">--Select--</option>');
+
+                var json = { id: deptId };
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GetCoursesByDepartmentId", "Home")',
+                    contentType: 'application/json',
+                    data: JSON.stringify(json),
+                    success: function (response) {
+                        $.each(response, function (key, value) {
+                            $('#CourseId').append('<option value="' + value.Id + '">' + value.Name + '</option>');
+                        });
+                    }
+                });
+            });
+
+            $('#FromTime').timepicker();
+
+            $('#ToTime').timepicker();
+        });
+    </script>
+}

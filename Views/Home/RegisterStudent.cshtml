@@ -1,0 +1,65 @@
+﻿@using System.Web.UI.WebControls
+@model Projects.Models.RegisterStudent
+@{
+    ViewBag.Title = "RegisterStudent";
+    List<SelectListItem> departments = ViewBag.DepartmentLists;
+    string message = ViewBag.Message;
+}
+
+
+<div class="padding-up"></div>
+<fieldset>
+    <legend>Register student</legend>
+    @using (Html.BeginForm())
+    {
+        <table class="table table-borderless d-block">
+            <tbody>
+                <tr>
+                    <td>@Html.LabelFor(m => m.Name)</td>
+                    <td>@Html.TextBoxFor(m => m.Name, new { placeholder = "Enter Student Name" })</td>
+                    <td>@Html.ValidationMessageFor(m => m.Name)</td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor(m => m.Email)</td>
+                    <td>@Html.TextBoxFor(m => m.Email, new { placeholder = "Enter Student Email" })</td>
+                    <td>@Html.ValidationMessageFor(m => m.Email)</td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor(m => m.ContactNo)</td>
+                    <td>@Html.TextBoxFor(m => m.ContactNo, new { placeholder = "Enter Contact Number" })</td>
+                    <td>@Html.ValidationMessageFor(m => m.ContactNo)</td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor(m => m.Date)</td>
+                    <td>@Html.EditorFor(m => m.Date, new { htmlAttributes = new { @class = "datepicker" } })</td>
+                    <td>@Html.ValidationMessageFor(m => m.Date)</td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor(m => m.Address)</td>
+                    <td>@Html.TextAreaFor(m => m.Address, new { placeholder = "Enter Student Address" })</td>
+                    <td>@Html.ValidationMessageFor(m => m.Address)</td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor(m => m.Name)</td>
+                    <td>@Html.DropDownListFor(m => m.DepartmentId, departments, "Value", "Text")</td>
+                    <td>@Html.ValidationMessageFor(m => m.DepartmentId)</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><input type="submit" value="Register" class="btn-outline-dark btn-sm" /></td>
+                </tr>
+            </tbody>
+        </table>
+        <legend>@message</legend>
+    }
+</fieldset>
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $(".datepicker").datepicker({
+                dateFormat: "yy/mm/dd"
+            });
+        });
+    </script>
+}

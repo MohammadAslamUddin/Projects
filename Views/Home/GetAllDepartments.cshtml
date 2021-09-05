@@ -1,0 +1,33 @@
+﻿@using UniversityBITM.Models
+@model Department
+@{
+    ViewBag.Title = "GetAllDepartments";
+    List<Department> departments = ViewBag.Departments;
+}
+
+
+<div class="padding-up"></div>
+
+@using (Html.BeginForm())
+{
+    <fieldset>
+        <legend>View All Departments</legend>
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>@Html.Label("Code")</th>
+                    <th>@Html.Label("Name")</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Department dep in departments)
+                {
+                    <tr>
+                        <td>@dep.Code</td>
+                        <td>@dep.Name</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </fieldset>
+}

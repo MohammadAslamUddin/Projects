@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - UniversityX</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+<nav class="navbar navbar-expand-sm navbar-dark fixed-top bg-dark">
+    <div class="container">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <a href="/"><img src="/Pictures/ustc-0.png", style="width: 100px"/></a>
+        <div class="navbar-collapse collapse" id="navbarSupportedContent">
+
+            <ul class="nav navbar-nav mr-auto">
+                <li class="nav-item">@Html.ActionLink("Home", "Index", "Home", null, new { @class = "nav-link font-small" })</li>
+                <li class="nav-item">@Html.ActionLink("Department", "SaveDepartment", "Home", null, new { @class = "nav-link font-small" })</li>
+                <li class="nav-item">@Html.ActionLink("Show All Department", "GetAllDepartments", "Home", null, new { @class = "nav-link font-small" })</li>
+                <li class="nav-item">@Html.ActionLink("Course", "SaveCourse", "Home", null, new { @class = "nav-link font-small" })</li>
+                <li class="nav-item">@Html.ActionLink("Teacher", "SaveTeacher", "Home", null, new { @class = "nav-link font-small" })</li>
+                <li class="nav-item">@Html.ActionLink("Course Assign To Teacher", "CourseAssignToTeacher", "Home", null, new { @class = "nav-link font-small" })</li>
+                <li class="nav-item">@Html.ActionLink("Course Statistics", "ViewCourseStatistics", "Home", null, new { @class = "nav-link font-small" })</li>
+                <li class="nav-item">@Html.ActionLink("Register Student", "RegisterStudent", "Home", null, new { @class = "nav-link font-small" })</li>
+                <li class="nav-item">@Html.ActionLink("Allocate Classroom", "AllocateClassRoom", "Home", null, new { @class = "nav-link font-small" })</li>
+                <li class="nav-item">@Html.ActionLink("View Schedule", "ViewSchedule", "Home", null, new { @class = "nav-link font-small" })</li>
+                <li class="nav-item">@Html.ActionLink("Enroll Course", "EnrollCourse", "Home", null, new { @class = "nav-link font-small" })</li>
+                <li class="nav-item">@Html.ActionLink("Save Result", "SaveStudentResult", "Home", null, new { @class = "nav-link font-small" })</li>
+                <li class="nav-item">@Html.ActionLink("View Result", "ViewResult", "Home", null, new { @class = "nav-link font-small" })</li>
+                <li class="nav-item">@Html.ActionLink("Unassign All Courses", "UnassignCourses", "Home", null, new { @class = "nav-link font-small" })</li>
+                <li class="nav-item">@Html.ActionLink("Unallocate Rooms", "UnallocateRooms", "Home", null, new { @class = "nav-link font-small" })</li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container body-content">
+    @RenderBody()
+</div>
+
+
+<div class="fixed-bottom bg-dark" style="color:#fff">
+    <br/>
+    <footer>
+        <center><p>&copy; @DateTime.Now.Year - My ASP.NET Application</p></center>
+    </footer>
+</div>
+    
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryval")
+@Scripts.Render("~/script/core")
+@RenderSection("scripts", required: false)
+</body>
+</html>

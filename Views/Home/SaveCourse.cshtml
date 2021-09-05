@@ -1,0 +1,55 @@
+﻿@model UniversityBITM.Models.Course
+
+@{
+    ViewBag.Title = "SaveCourse";
+    List<SelectListItem> departmentItems = ViewBag.DepartmentLists;
+    List<SelectListItem> semesters = ViewBag.Semesters;
+    string message = ViewBag.Message;
+}
+
+
+<div class="padding-up"></div>
+
+@using (Html.BeginForm())
+{
+    <fieldset>
+        <legend>Save Course</legend>
+        <table class="table table-borderless d-grid">
+            <tr>
+                <td>@Html.LabelFor(m => m.Code)</td>
+                <td>@Html.TextBoxFor(m => m.Code, new { placeholder = "Enter a Course Code" })</td>
+                <td>@Html.ValidationMessageFor(m => m.Code)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.Name)</td>
+                <td>@Html.TextBoxFor(m => m.Name, new { placeholder = "Enter a Course Name" })</td>
+                <td>@Html.ValidationMessageFor(m => m.Name)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.Credit)</td>
+                <td>@Html.TextBoxFor(m => m.Credit, new { placeholder = "Course Credit" })</td>
+                <td>@Html.ValidationMessageFor(m => m.Credit)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.Description)</td>
+                <td>@Html.TextAreaFor(m => m.Description, new { placeholder = "Enter Description" })</td>
+                <td>@Html.ValidationMessageFor(m => m.Description)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.DepartmentId)</td>
+                <td>@Html.DropDownListFor(m => m.DepartmentId, departmentItems, "Value", "Text")</td>
+                <td>@Html.ValidationMessageFor(m => m.DepartmentId)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.SemesterId)</td>
+                <td>@Html.DropDownListFor(m => m.SemesterId, semesters, "Value", "Text")</td>
+                <td>@Html.ValidationMessageFor(m => m.SemesterId)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="submit" value="Save" class="btn-outline-dark btn-sm" /></td>
+            </tr>
+        </table>
+        <label>@message</label>
+    </fieldset>
+}

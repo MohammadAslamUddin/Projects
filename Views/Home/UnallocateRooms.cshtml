@@ -1,0 +1,21 @@
+﻿
+@{
+    ViewBag.Title = "UnallocateRooms";
+    string message = ViewBag.Message;
+}
+
+
+<div class="padding-up"></div>
+
+<fieldset>
+    <legend>UnAllocate Rooms</legend>
+    @if (@message != null)
+    {
+        <div id="warningLabel" class="alert-warning">
+            <label>@message</label>
+        </div>
+    }
+    <form method="post" id="unassignForm">
+        <input type="submit" name="" id="unassignCourse" data-confirm="Are you sure?" value="Unassign Courses" />
+    </form>
+</fieldset>

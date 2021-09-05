@@ -1,0 +1,15 @@
+﻿body {
+}
+.field-validation-error {
+    color: red;
+}
+#coverimage {
+    width: 100%;
+}
+.font-small {
+    font-size: 14px;
+}
+
+.padding-up {
+    padding-top: 50px;
+}

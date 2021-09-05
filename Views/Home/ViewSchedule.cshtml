@@ -1,0 +1,59 @@
+﻿@using System.Web.UI.WebControls
+@using UniversityBITM.Models
+
+@{
+    ViewBag.Title = "ViewSchedule";
+    List<SelectListItem> departments = ViewBag.DepartmentLists;
+}
+
+<div class="padding-up"></div>
+
+
+<fieldset>
+    <legend>View Class Schedule & Room Allocation Information</legend>
+    <label>Department</label>
+    <select id="departmentId" name="departmentId">
+        <option>Select</option>
+        @foreach (var dep in departments)
+        {
+            <option value="@dep.Value">@dep.Text</option>
+        }
+    </select>
+    <table class="table" id="scheduletable">
+        <thead>
+            <tr>
+                <td>Course Code</td>
+                <td>Name</td>
+                <td>Schedule Info</td>
+            </tr>
+        </thead>
+        <tbody id="tablebody"></tbody>
+    </table>
+</fieldset>
+
+@section scripts
+{
+    <script type="text/javascript">
+        $(function () {
+            $('#departmentId').on('change', function() {
+
+                var depId = $('#departmentId').val();
+
+                var json = { id: depId };
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GetClassScheduleByDepartmentId", "Home")',
+                    contentType: 'application/json',
+                    data: JSON.stringify(json),
+                    success: function (response) {
+                        $("#tablebody").empty();
+                        $.each(response, function (key, value) {
+                            $('#tablebody').append('<tr><td>' + value.CourseCode + '</td><td>' + value.CourseName + '</td><td>' + value.Schedule + '</td></tr>');
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}

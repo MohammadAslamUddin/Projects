@@ -1,0 +1,31 @@
+﻿@model UniversityBITM.Models.Department
+
+@{
+    ViewBag.Title = "SaveDepartment";
+    string message = ViewBag.Message;
+}
+
+<div class="padding-up"></div>
+@using (Html.BeginForm())
+{
+    <fieldset>
+        <legend>Save Department</legend>
+        <table class="table table-borderless d-grid">
+            <tr>
+                <td>@Html.LabelFor(m => m.Code)</td>
+                <td>@Html.TextBoxFor(m=>m.Code, new { placeholder = "Enter a Code" })</td>
+                <td>@Html.ValidationMessageFor(m=>m.Code)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.Name)</td>
+                <td>@Html.TextBoxFor(m => m.Name, new { placeholder = "Enter a Name" })</td>
+                <td>@Html.ValidationMessageFor(m => m.Name)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="submit" value="Save" class="btn-outline-dark btn-sm"/></td>
+            </tr>
+        </table>
+        <label>@message</label>
+    </fieldset>
+}

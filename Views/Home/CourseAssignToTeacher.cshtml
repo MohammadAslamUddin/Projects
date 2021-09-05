@@ -1,0 +1,155 @@
+﻿@using UniversityBITM.Models
+@model Projects.Models.CourseAssignToTeacher
+
+@{
+    ViewBag.Title = "CourseAssignToTeacher";
+    List<SelectListItem> departments = ViewBag.DepartmentLists;
+    string message = ViewBag.Message;
+}
+
+
+<div class="padding-up"></div>
+
+@using (Html.BeginForm())
+{
+    <fieldset>
+        <legend>Course Assign To Teacher</legend>
+        <table class="table table-borderless d-grid">
+            <tr>
+                <td>@Html.LabelFor(m => m.DepartmentId)</td>
+                <td>@Html.DropDownListFor(m => m.DepartmentId, departments, "Value", "Text")</td>
+                <td>@Html.ValidationMessageFor(m => m.DepartmentId)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.TeacherId)</td>
+                <td>
+                    <select id="TeacherId" name="TeacherId" class="TeacherId">
+                        <option>Select Teacher</option>
+                    </select>
+                </td>
+                <td>@Html.ValidationMessageFor(m => m.TeacherId)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.CreditToBeTaken)</td>
+                <td>@Html.TextBoxFor(m => m.CreditToBeTaken)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.RemainingCredit)</td>
+                <td>@Html.TextBoxFor(m => m.RemainingCredit)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.CourseCode)</td>
+                <td>
+                    <select id="CourseCode" name="CourseCode" class="CourseCode">
+                        <option>Select Course Code</option>
+                    </select>
+                </td>
+                <td>@Html.ValidationMessageFor(m => m.CourseCode)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.CourseName)</td>
+                <td>@Html.TextBoxFor(m => m.CourseName)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.CourseCredit)</td>
+                <td>@Html.TextBoxFor(m => m.CourseCredit)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="submit" value="Save" class="btn-outline-dark btn-sm" /></td>
+            </tr>
+        </table>
+        <label>@message</label>
+    </fieldset>
+}
+
+@section scripts
+{
+    <script>
+        $(function() {
+            $('#DepartmentId').on('change', function () {
+
+                $("#CreditToBeTaken").prop('disabled', true);
+                $("#RemainingCredit").prop('disabled', true);
+                $("#CourseName").prop('disabled', true);
+                $("#CourseCredit").prop('disabled', true);
+
+
+                var depId = $('#DepartmentId').val();
+                $('#TeacherId').empty();
+                $('#TeacherId').append('<option value="">--Select--</option>');
+                $('#CourseCode').empty();
+                $('#CourseCode').append('<option value="">--Select--</option>');
+
+
+                var json = { id: depId };
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GetTeacherbyDepartmentId", "Home")',
+                    contentType: 'application/json',
+                    data: JSON.stringify(json),
+                    success: function (response) {
+                        $.each(response, function (key, value) {
+                            $('#TeacherId').append('<option value="' + value.Id + '">' + value.Name + '</option>');
+                        });
+                    }
+                });
+
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GetCoursebyDepartmentId", "Home")',
+                    contentType: 'application/json',
+                    data: JSON.stringify(json),
+                    success: function (response) {
+                        $.each(response, function (key, value) {
+                            $('#CourseCode').append('<option value="' + value.Id + '">' + value.Code + '</option>');
+                        });
+                    }
+                });
+            });
+        });
+
+        $(function() {
+            $('#TeacherId').on('change',function () {
+
+                var teacherId = $('#TeacherId').val();
+
+                $('#CreditToBeTaken').empty();
+                var json = { id: teacherId };
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GetCreditByTeacherId", "Home")',
+                    contentType: 'application/json',
+                    data: JSON.stringify(json),
+                    success: function(response) {
+                        $('#CreditToBeTaken').val(response['CreditToBeTaken']);
+                        $('#RemainingCredit').val(response['remainingCredit']);
+                    }
+                });
+            });
+        });
+        $(function() {
+            $('#CourseCode').on('change',function() {
+
+                var courseId = $('#CourseCode').val();
+
+                    $('#CourseName').empty();
+
+                var json = { id: courseId };
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("GetCourseNameByCourseId", "Home")',
+                        contentType: 'application/json',
+                        data: JSON.stringify(json),
+                        success: function(response) {
+                            $('#CourseName').val(response['Name']);
+                            $('#CourseCredit').val(response['Credit']);
+                        }
+                    });
+            });
+        });
+    </script>
+}

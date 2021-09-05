@@ -1,0 +1,68 @@
+﻿@using Projects.Models
+@using UniversityBITM.Models
+
+@{
+    ViewBag.Title = "DownloadPDF";
+
+    DownloadModel model = ViewBag.Data;
+    Layout = null;
+
+    double totalCredit = 0.0, calculatedCG = 0.0, credit;
+
+    RegisterStudent student = new RegisterStudent();
+
+    student = model.Student;
+
+    List<Course> courses = model.Courses;
+
+}
+
+<table class="table table-borderless">
+    <tbody>
+    <tr>
+        <td><label>Reg. No : </label></td>
+        <td>@student.StudentRegNo</td>
+    </tr>
+    <tr>
+        <td><label>Name : </label></td>
+        <td>@student.Name</td>
+    </tr>
+    <tr>
+        <td><label>Address : </label></td>
+        <td>@student.Address</td>
+    </tr>
+    <tr>
+        <td><label>Email : </label></td>
+        <td>@student.Email</td>
+    </tr>
+    <tr>
+        <td><label>Department Name : </label></td>
+        <td>@student.DepartmentName</td>
+    </tr>
+    </tbody>
+</table>
+
+<table class="table table-bordered active table-active">
+    <thead>
+    <tr>
+        <th>Code</th>
+        <th>Name</th>
+        <th>Grade</th>
+    </tr>
+    </thead>
+    <tbody >
+    @foreach (var course in courses)
+    {
+
+        <tr>
+            <td>@course.Code</td>
+            <td>@course.Name</td>
+            <td>@course.Grade</td>
+        </tr>
+    }
+    </tbody>
+</table>
+<br/>
+<br/>
+<br/>
+<p class="card-footer">This Result Sheet was generated on: @DateTime.Now.ToString("D")</p>

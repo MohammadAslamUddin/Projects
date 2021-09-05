@@ -1,0 +1,127 @@
+﻿@model Projects.Models.EnrollCourse
+@{
+    ViewBag.Title = "EnrollCourse";
+    List<SelectListItem> students = ViewBag.Students;
+    string message = ViewBag.Message;
+}
+
+
+<div class="padding-up"></div>
+<fieldset>
+    <legend>Enroll In a Course</legend>
+    @using (Html.BeginForm())
+    {
+        <table class="table table-borderless d-grid">
+            <tbody>
+                <tr>
+                    <td>@Html.LabelFor(m => m.StudentRegNo)</td>
+                    <td>@Html.DropDownListFor(m => m.StudentRegNo, students, "value", "Text")</td>
+                    <td>@Html.ValidationMessageFor(m => m.StudentRegNo)</td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor(m => m.Name)</td>
+                    <td>@Html.TextBoxFor(m => m.Name)</td>
+                    <td>@Html.ValidationMessageFor(m => m.Name)</td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor(m => m.Email)</td>
+                    <td>@Html.TextBoxFor(m => m.Email)</td>
+                    <td>@Html.ValidationMessageFor(m => m.Email)</td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor(m => m.DepartmentName)</td>
+                    <td>@Html.TextBoxFor(m => m.DepartmentName)</td>
+                    <td>@Html.ValidationMessageFor(m => m.DepartmentName)</td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor(m => m.CourseId)</td>
+                    <td>
+                        <select name="CourseId" id="CourseId">
+                            <option value="">Select</option>
+                        </select>
+                    </td>
+                    <td>@Html.ValidationMessageFor(m => m.CourseId)</td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor(m => m.Date)</td>
+                    <td>@Html.EditorFor(m => m.Date, new { htmlAttributes = new { @class = "datepicker" } })</td>
+                    <td>@Html.ValidationMessageFor(m => m.Date)</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><input type="submit" value="Enroll" class="btn-outline-dark btn-sm" /></td>
+                </tr>
+            </tbody>
+        </table>
+        <label id="message">@message</label>
+    }
+</fieldset>
+
+@section scripts
+{
+    <script>
+
+        $(function() {
+            $('#StudentRegNo').on('change', function() {
+
+                $('#Name').val('');
+                $('#Email').val('');
+                $('#DepartmentName').val('');
+                $('#Date').val('');
+
+
+                    $('#Name').prop('disabled', true);
+                    $('#Email').prop('disabled', true);
+                    $('#DepartmentName').prop('disabled', true);
+
+                    var studentId = $('#StudentRegNo').val();
+
+                    var json = { id: studentId };
+
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("GetStudnetInfoByCourseId", "Home")',
+                        contentType: 'application/json',
+                        data: JSON.stringify(json),
+                        success: function(response) {
+                            $('#Name').val(response['Name']);
+                            $('#Email').val(response['Email']);
+                            $('#DepartmentName').val(response["DepartmentName"]);
+                        }
+                    });
+                });
+        });
+
+        $(function() {
+            $('#StudentRegNo').on('change', function() {
+                var studentId = $('#StudentRegNo').val();
+
+                $('#CourseId').prop('disabled', true);
+                $('#CourseId').empty();
+                $('#CourseId').append('<option value="">---Select---</option>');
+
+                var json = { id: studentId };
+
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("GetCoursesByDepId", "Home")',
+                        contentType: 'application/json',
+                        data: JSON.stringify(json),
+                        success: function (response) {
+                            $('#CourseId').prop('disabled', false);
+                            $.each(response, function (key, value) {
+                                    $('#CourseId').append('<option value="' + value.Value + '">' + value.Text + '</option>');
+                                });
+                        }
+                    });
+                });
+        });
+        $(document).ready(function() {
+            $(".datepicker").datepicker({
+                dateFormat: "yy/mm/dd",
+                changemonth: true,
+                changeyear: true
+            });
+        });
+    </script>
+}

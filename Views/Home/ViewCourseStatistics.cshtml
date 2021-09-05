@@ -1,0 +1,56 @@
+﻿@model Projects.Models.CourseStatistics
+@{
+    ViewBag.Title = "ViewCourseStatistics";
+    List<SelectListItem> departments = ViewBag.DepartmentLists;
+}
+
+
+<div class="padding-up"></div>
+
+@using (Html.BeginForm())
+{
+    <fieldset>
+        <legend>View Course Statistics</legend>
+        <label>Department</label>
+        @Html.DropDownList("DepartmentId", departments, "Value", "Text")
+        <legend>Course Information</legend>
+        <table class="table table-bordered d-block">
+            <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Name/Title</th>
+                    <th>Semester</th>
+                    <th>Assigned To</th>
+                </tr>
+            </thead>
+            <tbody id="CourseInfo">
+            </tbody>
+        </table>
+    </fieldset>
+}
+
+@section scripts
+{
+    <script type="text/javascript">
+        $(function () {
+            $("#DepartmentId").on('change', function() {
+
+                var depId = $("#DepartmentId").val();
+                var json = { departmentId: depId };
+
+                $.ajax({
+                    type: "Post",
+                    url: '@Url.Action("GetCourseInfoByDepartmentId","Home")',
+                    contentType: 'application/json',
+                    data: JSON.stringify(json),
+                    success: function (response) {
+                        $("#CourseInfo").empty();
+                        $.each(response, function(key, value) {
+                            $("#CourseInfo").append('<tr><td>' + value.CourseCode + '</td><td>' + value.CourseName + '</td><td>' + value.Semester + '</td><td>' + value.Teacher + '</td><tr>');
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}
