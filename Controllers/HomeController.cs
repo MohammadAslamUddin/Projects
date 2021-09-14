@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using Microsoft.Ajax.Utilities;
-using Projects.BLL;
-using Projects.Gateway;
+﻿using Projects.BLL;
 using Projects.Models;
 using Rotativa;
+using System.Collections.Generic;
+using System.Web.Mvc;
 using UniversityBITM.BLL;
 using UniversityBITM.Models;
 
@@ -42,7 +37,7 @@ namespace Projects.Controllers
             enrollCourseManager = new EnrollCourseManager();
             saveResultManager = new SaveResultManager();
             viewResultManager = new ViewResultManager();
-            
+
         }
 
         public ActionResult Index()
@@ -97,11 +92,11 @@ namespace Projects.Controllers
             ViewBag.Designations = teacherManager.GetAllDesignations();
             return View();
         }
-        
+
         public ActionResult CourseAssignToTeacher()
         {
             ViewBag.DepartmentLists = departmentManager.GetAllDepartmentsInLists();
-            
+
             return View();
         }
 
@@ -117,7 +112,7 @@ namespace Projects.Controllers
             List<Course> courses = courseAssignToTeacherManager.GetCoursebyDepartmentId(id);
             return Json(courses);
         }
-        [HttpPost] 
+        [HttpPost]
         public JsonResult GetCreditByTeacherId(int id)
         {
             teacher = courseAssignToTeacherManager.GetCreditByTeacherId(id);
@@ -146,7 +141,7 @@ namespace Projects.Controllers
             return View();
         }
         [HttpPost]
-        public JsonResult GetCourseInfoByDepartmentId (int departmentId)
+        public JsonResult GetCourseInfoByDepartmentId(int departmentId)
         {
             List<CourseStatistics> courseStatisticses = courseStatisticsManager.GetAllCourses(departmentId);
             return Json(courseStatisticses);
@@ -183,10 +178,10 @@ namespace Projects.Controllers
         public ActionResult AllocateClassRoom(AllocateClassRoom allocateClassRoom)
         {
             ViewBag.Message = allocateClassRoomManager.Save(allocateClassRoom);
-            ViewBag.DepartmentLists = departmentManager.GetAllDepartmentsInLists(); 
+            ViewBag.DepartmentLists = departmentManager.GetAllDepartmentsInLists();
             ViewBag.RoomList = allocateClassRoomManager.Rooms();
             ViewBag.DayList = allocateClassRoomManager.Day();
-            
+
             return View();
         }
 
@@ -218,7 +213,7 @@ namespace Projects.Controllers
         [HttpPost]
         public JsonResult GetStudnetInfoByCourseId(int id)
         {
-            RegisterStudent student= enrollCourseManager.GetStudnetInfoByCourseId(id);
+            RegisterStudent student = enrollCourseManager.GetStudnetInfoByCourseId(id);
             return Json(student);
         }
 
@@ -240,7 +235,7 @@ namespace Projects.Controllers
         public ActionResult SaveStudentResult(SaveResult result)
         {
             ViewBag.Message = saveResultManager.Save(result);
-            ViewBag.Students = enrollCourseManager.GetAllStudents(); 
+            ViewBag.Students = enrollCourseManager.GetAllStudents();
             ViewBag.Grades = saveResultManager.GetAllGrades();
             return View();
         }
@@ -266,7 +261,7 @@ namespace Projects.Controllers
 
         public ActionResult MakePDF(int studentRegNo)
         {
-            return new ActionAsPdf("DownloadPDF", new{SId = studentRegNo}) {FileName = "ResultPDF"};
+            return new ActionAsPdf("DownloadPDF", new { SId = studentRegNo }) { FileName = "ResultPDF" };
         }
 
         public ActionResult DownloadPDF(int SId)
